@@ -1,0 +1,30 @@
+query token($tokenId: ID!, $getBankAccount: Boolean!) {
+    token(id: $tokenId) {
+        id
+        name
+        legalName
+        reference
+        valid
+        verified
+        user {
+            givenName
+            familyName
+            email
+            mobile
+        }
+        organization {
+            name
+            tradeName
+            type
+            registration
+            taxNumber
+        }
+        bankAccount @include(if: $getBankAccount) {
+            accountNumber
+            accountType
+            bank
+            bankName
+            branchCode
+        }
+    }
+}

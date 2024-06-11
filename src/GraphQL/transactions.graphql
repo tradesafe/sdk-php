@@ -1,0 +1,39 @@
+fragment TransactionFields on Transaction {
+    id
+    title
+    description
+    state
+    industry
+    reference
+    customReference
+    allocations {
+        id
+        state
+    }
+}
+
+query transactions {
+    transactions {
+        data {
+            ...TransactionFields
+        }
+    }
+}
+
+query transaction($id: ID!) {
+    transaction(id: $id) {
+        ...TransactionFields
+    }
+}
+
+mutation createTransaction($input: CreateTransactionInput!) {
+    transaction: transactionCreate(input: $input) {
+        ...TransactionFields
+    }
+}
+
+mutation cancelTransaction($id: ID!) {
+    transaction: transactionCancel(id: $id) {
+        ...TransactionFields
+    }
+}

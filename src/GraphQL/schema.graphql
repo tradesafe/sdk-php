@@ -1,0 +1,2278 @@
+# This file was generated. Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+interface DepositCalculationDetails {
+    depositValue: Float
+    fee: Float
+    value: Float
+}
+
+union AccountSource = Allocation | Token | Transaction
+
+union PaymentSource = Allocation | Drawdown | Token | Transaction
+
+union PaymentTarget = Token
+
+type Acceptance {
+    accepted: Boolean
+    acceptedDate: DateTime
+    user: AcceptanceUserData
+}
+
+type AcceptanceUserData {
+    "Email"
+    email: String
+    "Last Name"
+    familyName: String
+    "First Name"
+    givenName: String
+}
+
+type Account {
+    amount: Float
+    createdAt: DateTime
+    deletedAt: DateTime
+    information: JSON
+    reference: String
+    source: AccountSource
+    status: TransactionStatus
+    type: TransactionType
+    updatedAt: DateTime
+}
+
+"A paginated list of Account items."
+type AccountPaginator {
+    "A list of Account items."
+    data: [Account!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Address {
+    area: String
+    city: String
+    code: String
+    country: Country
+    createdAt: DateTime
+    deletedAt: DateTime
+    id: ID
+    line1: String
+    line2: String
+    line3: String
+    line4: String
+    name: String
+    updatedAt: DateTime
+}
+
+type Allocation {
+    acceptances: [Acceptance]
+    acceptedAmendment: Amendment
+    address: Address
+    amendments(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Amendment]
+    auxiliaryData: JSON
+    calculation: AllocationCalculation
+    createdAt: DateTime
+    currentAmendment: Amendment
+    daysToDeliver: Float
+    daysToInspect: Float
+    deletedAt: DateTime
+    deliverBy: DateTime
+    deliveryInstructions: JSON
+    description: String
+    hasAccepted: Boolean
+    id: ID
+    initiatedDate: DateTime
+    inspectBy: DateTime
+    payments(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Payments]
+    state: AllocationState
+    title: String
+    transaction(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): Transaction
+    transactionId: ID
+    unitCost: Float
+    units: Float
+    updatedAt: DateTime
+    value: Float
+}
+
+type AllocationCalculation {
+    fee: Float
+    id: ID
+    originalValues: AllocationCalculation
+    payout: Float
+    processingFee: Float
+    refund: Float
+    unitCost: Float
+    units: Float
+    value: Float
+}
+
+type AllocationPreview {
+    description: String
+    id: ID
+    logoUrl: String
+    merchantName: String
+    state: AllocationState
+    title: String
+    value: Float
+}
+
+type AllocationSummary {
+    calculation: AllocationCalculation
+    id: ID
+    payments(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Payments]
+    state: AllocationState
+    title: String!
+}
+
+type Amendment {
+    acceptances: [Acceptance]
+    accepted: Boolean
+    comments: [Comment]
+    createdAt: DateTime
+    daysToDeliver: Float
+    daysToInspect: Float
+    deletedAt: DateTime
+    deliverBy: DateTime
+    hasAccepted: Boolean
+    id: ID!
+    inspectBy: DateTime
+    state: AmendmentState
+    unitCost: Float
+    units: Float
+    updatedAt: DateTime
+    value: Float
+}
+
+type ApiProfile {
+    id: ID
+    name: String
+    organizations: [OrganizationApiProfile]
+    token: String
+}
+
+type AvsrResult {
+    accountTypeMatch: Boolean
+    credits: Boolean
+    debits: Boolean
+    found: Boolean
+    identityMatch: Boolean
+    isNew: Boolean
+    open: Boolean
+}
+
+type BankAccount {
+    accountNumber: String
+    accountNumberSuffix: String
+    accountType: BankAccountType
+    bank: UniversalBranchCode
+    bankName: String
+    branchCode: String
+    createdAt: DateTime
+    deletedAt: DateTime
+    id: ID
+    updatedAt: DateTime
+    verified: Boolean
+}
+
+type Calculation {
+    allocations: [AllocationCalculation]
+    baseValue: Float
+    cancellationFee: Float
+    drawdownTotals: DrawdownCalculation
+    gatewayProcessingFees: GatewayProcessingFees @deprecated(reason: "No longer supported")
+    parties: [PartyCalculation]
+    processingFeeOzow: Float @deprecated(reason: "No longer supported")
+    processingFeePercentage: Float
+    processingFeeSnapscan: Float @deprecated(reason: "No longer supported")
+    processingFeeTotal: Float
+    processingFeeValue: Float
+    processingFeeVat: Float
+    processingFees: ProcessingFees
+    totalDeposits: Float
+    totalValue: Float
+    totalValueOzow: Float @deprecated(reason: "No longer supported")
+    totalValueSnapscan: Float @deprecated(reason: "No longer supported")
+}
+
+type Card {
+    id: ID
+    month: Int
+    name: String
+    number: String
+    year: Int
+}
+
+type ClientInfo {
+    callback: String
+    id: ID
+    name: String
+    organizationId: ID
+    production: Boolean @deprecated(reason: "No longer supported")
+}
+
+type Comment {
+    body: String
+    createdAt: DateTime
+    deletedAt: DateTime
+    id: ID
+    isNew: Boolean
+    owner: CommentOwner
+    updatedAt: DateTime
+}
+
+type CommentOwner {
+    activeUser: Boolean
+    avatar: String
+    name: String
+    role: String
+}
+
+type Deposit {
+    calculation: DepositCalculation
+    createdAt: DateTime
+    deletedAt: DateTime
+    id: ID
+    method: DepositMethod
+    paymentLink: String
+    processed: Boolean
+    processingFee: Float
+    redirects: DepositRedirects
+    totalProcessingFee: Float
+    updatedAt: DateTime
+    value: Float
+}
+
+type DepositCalculation {
+    eft: EftCalculationDetails
+    ozow: OzowCalculationDetails
+}
+
+type DepositDetails {
+    branch: String
+    name: String
+    number: String
+    reference: String
+    type: String
+}
+
+type DepositRedirects {
+    cancel: String @deprecated(reason: "No longer supported")
+    failure: String
+    success: String
+}
+
+type Drawdown {
+    createdAt: DateTime
+    deletedAt: DateTime
+    description: String
+    files: [File]
+    id: ID
+    reference: String
+    state: DrawdownState
+    title: String
+    updatedAt: DateTime
+    value: Float
+}
+
+type DrawdownCalculation {
+    available: Float
+    pending: Float
+    withdrawn: Float
+}
+
+type EftCalculationDetails implements DepositCalculationDetails {
+    bankingDetails: DepositDetails
+    depositValue: Float
+    fee: Float
+    value: Float
+}
+
+type EscrowFee {
+    fee: Float
+    percentage: Float
+    totalFee: Float
+    vat: Float
+}
+
+type ExpressTransaction {
+    checkoutLink: String
+    transactionId: ID
+}
+
+"File Object"
+type File {
+    "Allowed Parties"
+    allowedParties: [String]
+    "Filename"
+    filename: String
+    "ID of File"
+    id: ID
+    "Is New file"
+    isNew: Boolean
+    "File Metadata"
+    metadata: JSON
+    "MIME Type"
+    mimetype: String
+    "File URI"
+    uri: String
+}
+
+type FileUri {
+    filename: String
+    id: ID
+    uri: String
+}
+
+type GatewayProcessingFees {
+    ecentric: ProcessingFee
+    manualEft: ProcessingFee
+    ozow: ProcessingFee
+    snapscan: ProcessingFee
+}
+
+type Mutation {
+    allocationAcceptDelivery(id: ID!): Allocation
+    allocationCompleteDelivery(id: ID!): Allocation
+    allocationCourierDetails(code: String!, id: ID!, name: String!): Allocation
+    allocationDisputeDelivery(comment: String!, id: ID!): Allocation
+    allocationInTransit(id: ID!): Allocation
+    allocationPreviewAccept(id: ID!, signature: String!, timestamp: String!): Boolean
+    allocationPreviewDispute(comment: String, id: ID!, signature: String!, timestamp: String!): Boolean
+    allocationStartDelivery(id: ID!): Allocation
+    amendmentAccept(id: ID!): Amendment
+    amendmentCancel(comment: String!, id: ID!): Amendment
+    amendmentCreate(allocationId: ID!, input: AmendmentInput!): Amendment
+    amendmentDecline(comment: String!, id: ID!): Amendment
+    calculator(input: CalculatorInput!): Calculation
+    cardDelete(cardId: ID!, tokenId: ID!): Boolean
+    checkoutLink(embed: Boolean, paymentMethods: [DepositMethod], transactionId: ID!): String
+    drawdownApprove(id: ID!): Drawdown
+    drawdownCancel(comment: String, id: ID!): Drawdown
+    drawdownCreate(input: DrawdownInput): Drawdown
+    drawdownDelete(id: ID!): Drawdown
+    drawdownReject(comment: String, id: ID!): Drawdown
+    drawdownRequest(id: ID!): Drawdown
+    recurringPaymentCreate(input: RecurringPaymentInput!): RecurringPayment
+    recurringPaymentDelete(id: ID!): RecurringPayment
+    secure3DLookup(input: RecurringPaymentUserData): Secure3DLookup
+    tokenAccountWithdraw(id: ID!, rtc: Boolean, value: Float): Boolean
+    tokenCreate(input: TokenInput): Token
+    tokenUpdate(id: ID!, input: TokenInput): Token
+    tokenVerify(id: ID!): Token
+    "Cancel a transaction"
+    transactionCancel(comment: String, fee: Float, id: ID!): Transaction
+    "Create a new transaction"
+    transactionCreate(input: CreateTransactionInput): Transaction
+    "Create a simple two party transaction with immediate payout"
+    transactionCreateExpress(input: CreateExpressTransactionInput!): ExpressTransaction
+    "Decline a transaction"
+    transactionDecline(comment: String, id: ID!): Transaction @deprecated(reason: "No longer supported")
+    "Delete a transaction"
+    transactionDelete(id: ID!): Transaction
+    "Register an EFT deposit for a transaction"
+    transactionDeposit(id: ID!, method: DepositMethod!, redirects: TransactionDepositRedirects, value: Float): Deposit
+    "Send invites to other parties linked to a transaction"
+    transactionInvite(id: ID!): Transaction
+    "Remove parties external from a transaction"
+    transactionRemoveParties(id: ID!): Boolean
+    "Update a transaction"
+    transactionUpdate(input: UpdateTransactionInput): Transaction
+}
+
+type OrganizationApiProfile {
+    id: ID
+    name: String
+    token: String
+    verified: Boolean
+}
+
+type OzowCalculationDetails implements DepositCalculationDetails {
+    depositValue: Float
+    fee: Float
+    value: Float
+}
+
+"Information about pagination using a fully featured paginator."
+type PaginatorInfo {
+    "Number of items in the current page."
+    count: Int!
+    "Index of the current page."
+    currentPage: Int!
+    "Index of the first item in the current page."
+    firstItem: Int
+    "Are there more pages after this one?"
+    hasMorePages: Boolean!
+    "Index of the last item in the current page."
+    lastItem: Int
+    "Index of the last available page."
+    lastPage: Int!
+    "Number of items per page."
+    perPage: Int!
+    "Number of total available items."
+    total: Int!
+}
+
+type Party {
+    acceptance: Acceptance
+    avatar: String
+    calculation: PartyCalculation
+    createdAt: DateTime
+    deletedAt: DateTime
+    details: PartyDetails
+    email: String
+    fee: Float
+    feeAllocation: FeeAllocation
+    feeType: FeeType
+    id: ID
+    name: String
+    owner: Boolean
+    reference: String
+    role: Role
+    settings: PartySettings
+    updatedAt: DateTime
+}
+
+type PartyCalculation {
+    agentFee: Float
+    beneficiaryFee: Float
+    commission: Float
+    deposit: Float
+    id: ID
+    partyId: ID @deprecated(reason: "No longer supported")
+    payout: Float
+    processingFee: Float
+    role: String
+    totalFee: Float
+}
+
+type PartyDetails {
+    legalName: String
+    name: String
+    organization: TokenOrganization
+    reference: String
+    tokenId: ID
+    user: TokenUser
+}
+
+type PartySettings {
+    payout: PayoutSettings
+}
+
+type Payments {
+    account: Account
+    id: ID
+    reference: String
+    rtc: Boolean
+    source: PaymentSource
+    target: PaymentTarget
+}
+
+type PayoutSettings {
+    interval: PayoutInterval
+    refund: RefundMethod
+}
+
+type ProcessingFee {
+    processingFee: Float
+    totalValue: Float
+}
+
+type ProcessingFees {
+    card: EscrowFee
+    ecentric: EscrowFee
+    eft: EscrowFee
+    instantEft: EscrowFee
+    ozow: EscrowFee
+    pjn: EscrowFee
+    snapscan: EscrowFee
+}
+
+type Query {
+    allocation(id: ID!): Allocation
+    allocationPreview(id: ID!, signature: String!, timestamp: String!): AllocationPreview
+    apiProfile: ApiProfile
+    cards(tokenId: ID!): [Card]
+    clientInfo: ClientInfo
+    party(
+        id: ID!,
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): Party
+    recurringPayment(id: ID!): RecurringPayment
+    recurringPaymentUrl(id: ID!): String
+    token(
+        id: ID!,
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): Token
+    tokenDepositDetails(id: ID!): DepositDetails
+    tokenStatement(
+        "Limits number of fetched items. Maximum allowed value: 100."
+        first: Int! = 25,
+        id: ID!,
+        "The offset from which items are returned."
+        page: Int
+    ): AccountPaginator!
+    tokens(
+        "Limits number of fetched items. Maximum allowed value: 100."
+        first: Int! = 10,
+        "The offset from which items are returned."
+        page: Int
+    ): TokenPaginator!
+    "Query a transaction"
+    transaction(
+        id: ID!,
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): Transaction
+    "Get the EFT deposit details for a transaction"
+    transactionDeposit(tokenId: ID): DepositDetails
+    transactionDepositLink(id: ID!): String @deprecated(reason: "No longer supported")
+    transactionHistory(id: ID!): [TransactionHistory] @deprecated(reason: "No longer supported")
+    "Get a list of transactions"
+    transactions(
+        createdAt: DateRange,
+        filter: TransactionFilterInput,
+        "Limits number of fetched items. Maximum allowed value: 100."
+        first: Int! = 10,
+        orderBy: [QueryTransactionsOrderByOrderByClause!],
+        "The offset from which items are returned."
+        page: Int,
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed,
+        updatedAt: DateRange
+    ): TransactionPaginator!
+    userinfo: Userinfo
+}
+
+type RecurringPayment {
+    beneficiaries: [RecurringPaymentBeneficiary]
+    buyer: Token
+    card: Card
+    createdAt: DateTime
+    description: String
+    endDate: Date
+    fee: Float
+    feeAllocation: RecurringPaymentFeeAllocation
+    history: [RecurringPaymentHistory]
+    id: ID
+    interval: RecurringPaymentInterval
+    state: RecurringPaymentState
+    title: String
+    totalValue: Float
+    updatedAt: DateTime
+    value: Float
+}
+
+type RecurringPaymentBeneficiary {
+    token: Token
+    value: Float
+}
+
+type RecurringPaymentHistory {
+    createdAt: DateTime
+    id: ID
+    message: String
+    response: JSON
+    status: RecurringPaymentStatus
+    updatedAt: DateTime
+}
+
+type ReportTransactionSummaryStats {
+    deposits: Float
+    fees: Float
+    paid: Float
+    value: Float
+}
+
+type Secure3DLookup {
+    acsUrl: String
+    paReqPayload: String
+    sessionId: String
+}
+
+type Token {
+    address: TokenAddress
+    avsrResult: AvsrResult
+    balance: Float
+    bankAccount: TokenBankAccount
+    id: ID
+    legalName: String
+    name: String
+    organization: TokenOrganization
+    reference: String
+    settings: TokenSettings
+    storedCards: [Card]
+    user: TokenUser
+    valid: Boolean
+    verified: Boolean
+}
+
+type TokenAddress {
+    area: String
+    city: String
+    code: String
+    country: Country
+    line1: String
+    line2: String
+    line3: String
+    line4: String
+}
+
+type TokenBankAccount {
+    accountNumber: String
+    accountType: BankAccountType
+    bank: UniversalBranchCode
+    bankName: String
+    branchCode: String
+}
+
+type TokenOrganization {
+    name: String
+    registration: String
+    taxNumber: String
+    tradeName: String
+    type: OrganizationType
+}
+
+"A paginated list of Token items."
+type TokenPaginator {
+    "A list of Token items."
+    data: [Token!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type TokenSettings {
+    payout: PayoutSettings
+}
+
+type TokenUser {
+    email: Email
+    familyName: String
+    givenName: String
+    idCountry: Country
+    idNumber: String
+    idType: IdType
+    mobile: String
+}
+
+type Transaction {
+    acceptances: [Acceptance]
+    "Address to deliver goods to"
+    address: Address @deprecated(reason: "No longer supported")
+    "How should the funds be paid out"
+    allocations(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Allocation]
+    "Created Through API"
+    api: Boolean
+    "Additional data to describe the transaction"
+    auxiliaryData: JSON
+    "Fees & Costs"
+    calculation: Calculation
+    "Comments made during the lifetime of the transaction"
+    comments(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Comment]
+    "Created date"
+    createdAt: DateTime
+    "The base curreny for the transaction"
+    currency: Currency
+    "Customised Reference"
+    customReference: String
+    "Deleted date"
+    deletedAt: DateTime
+    "Delivery Instructions"
+    deliveryInstructions: String @deprecated(reason: "No longer supported")
+    deposits(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Deposit]
+    "Long description of the transaction and its terms"
+    description: String
+    "Requests for funds to be paid out"
+    drawdowns(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Drawdown]
+    "How TradeSafe's fee is split between the parties"
+    feeAllocation: FeeAllocation
+    "Files attached to the transaction"
+    files: [File] @deprecated(reason: "No longer supported")
+    "The Unique ID of the transaction"
+    id: ID
+    "The industry classificaton for the transaction"
+    industry: Industry
+    "Metadata"
+    metadata: TransactionMetadata
+    "Parties involved in the transaction"
+    parties(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Party]
+    payments(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Payments]
+    privacy: TransactionPrivacy
+    reference: String
+    "The current state which the contact is in"
+    state: State
+    "Title sumarising the transaction"
+    title: String
+    "Last updated date"
+    updatedAt: DateTime
+    uuid: ID
+    "How should the transaction be structured"
+    workflow: TransactionWorkflow!
+}
+
+type TransactionHistory {
+    createdAt: DateTime
+    event: String
+    id: ID
+    newValues: JSON
+    oldValues: JSON
+    updatedAt: DateTime
+}
+
+type TransactionMetadata {
+    activeParty: Party
+    owner: Boolean
+    reference: String @deprecated(reason: "No longer supported")
+    verified: Boolean @deprecated(reason: "No longer supported")
+}
+
+"A paginated list of Transaction items."
+type TransactionPaginator {
+    "A list of Transaction items."
+    data: [Transaction!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type TransactionSummary {
+    allocations(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [AllocationSummary]
+    calculation: Calculation
+    createdAt: DateTime
+    deposits(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Deposit]
+    id: ID
+    payments(
+        "Allows to filter if trashed elements should be fetched."
+        trashed: Trashed
+    ): [Payments]
+    state: State
+    title: String
+    updatedAt: DateTime
+    uuid: ID
+}
+
+type Userinfo {
+    cellphonenumber: String
+    email: Email
+    first_name: String
+    id: ID
+    last_name: String
+    sub: ID
+}
+
+enum AllocationState {
+    "Canceled"
+    CANCELED
+    "Created"
+    CREATED
+    "Declined"
+    DECLINED
+    "Goods / Service Accepted"
+    DELIVERED
+    "Disputed"
+    DISPUTED
+    "Funds Released"
+    FUNDS_RELEASED
+    "Initiated"
+    INITIATED
+    "Goods / Service are in transit"
+    IN_TRANSIT
+    "Goods / Service Pending Acceptance"
+    PENDING_ACCEPTANCE
+    "Renegotiation"
+    RENEGOTIATION
+}
+
+enum AmendmentState {
+    "Accepted"
+    ACCEPTED
+    "Canceled"
+    CANCELED
+    "Created"
+    CREATED
+    "Declined"
+    DECLINED
+}
+
+enum AreaOfOperation {
+    "Fuel"
+    FUEL
+    "Mining"
+    MINING
+}
+
+enum AvsrAccountType {
+    "Bond"
+    BOND
+    "Cheque"
+    CHEQUE
+    "No account type specified"
+    NONE
+    "Savings"
+    SAVINGS
+    "Transmission"
+    TRANSMISSION
+}
+
+enum BankAccountType {
+    "Bond Account"
+    BOND
+    "Cheque/Current Account"
+    CHEQUE
+    "Savings Account"
+    SAVINGS
+    "Transmission Account"
+    TRANSMISSION
+}
+
+"The type of error that has been raised"
+enum CallbackAuthMethod {
+    "Basic HTTP Authentication"
+    BASIC
+    "Header Authentication"
+    HEADER
+    "No authentication"
+    NULL
+    "Query Parameter Authentication"
+    QUERY
+}
+
+enum Context {
+    "Organization"
+    ORGANIZATION
+    "Transaction"
+    TRANSACTION
+    "User"
+    USER
+}
+
+enum Country {
+    "Aruba"
+    ABW
+    "Afghanistan"
+    AFG
+    "Angola"
+    AGO
+    "Anguilla"
+    AIA
+    "Åland Islands"
+    ALA
+    "Albania"
+    ALB
+    "Andorra"
+    AND
+    "United Arab Emirates"
+    ARE
+    "Argentina"
+    ARG
+    "Armenia"
+    ARM
+    "American Samoa"
+    ASM
+    "Antarctica"
+    ATA
+    "French Southern Territories"
+    ATF
+    "Antigua and Barbuda"
+    ATG
+    "Australia"
+    AUS
+    "Austria"
+    AUT
+    "Azerbaijan"
+    AZE
+    "Burundi"
+    BDI
+    "Belgium"
+    BEL
+    "Benin"
+    BEN
+    "Bonaire, Sint Eustatius and Saba"
+    BES
+    "Burkina Faso"
+    BFA
+    "Bangladesh"
+    BGD
+    "Bulgaria"
+    BGR
+    "Bahrain"
+    BHR
+    "Bahamas"
+    BHS
+    "Bosnia and Herzegovina"
+    BIH
+    "Saint Barthélemy"
+    BLM
+    "Belarus"
+    BLR
+    "Belize"
+    BLZ
+    "Bermuda"
+    BMU
+    "Bolivia (Plurinational State of)"
+    BOL
+    "Brazil"
+    BRA
+    "Barbados"
+    BRB
+    "Brunei Darussalam"
+    BRN
+    "Bhutan"
+    BTN
+    "Bouvet Island"
+    BVT
+    "Botswana"
+    BWA
+    "Central African Republic"
+    CAF
+    "Canada"
+    CAN
+    "Cocos (Keeling) Islands"
+    CCK
+    "Switzerland"
+    CHE
+    "Chile"
+    CHL
+    "China"
+    CHN
+    "Côte d'Ivoire"
+    CIV
+    "Cameroon"
+    CMR
+    "Congo (Democratic Republic of the)"
+    COD
+    "Congo"
+    COG
+    "Cook Islands"
+    COK
+    "Colombia"
+    COL
+    "Comoros"
+    COM
+    "Cabo Verde"
+    CPV
+    "Costa Rica"
+    CRI
+    "Cuba"
+    CUB
+    "Curaçao"
+    CUW
+    "Christmas Island"
+    CXR
+    "Cayman Islands"
+    CYM
+    "Cyprus"
+    CYP
+    "Czechia"
+    CZE
+    "Germany"
+    DEU
+    "Djibouti"
+    DJI
+    "Dominica"
+    DMA
+    "Denmark"
+    DNK
+    "Dominican Republic"
+    DOM
+    "Algeria"
+    DZA
+    "Ecuador"
+    ECU
+    "Egypt"
+    EGY
+    "Eritrea"
+    ERI
+    "Western Sahara"
+    ESH
+    "Spain"
+    ESP
+    "Estonia"
+    EST
+    "Ethiopia"
+    ETH
+    "Finland"
+    FIN
+    "Fiji"
+    FJI
+    "Falkland Islands (Malvinas)"
+    FLK
+    "France"
+    FRA
+    "Faroe Islands"
+    FRO
+    "Micronesia (Federated States of)"
+    FSM
+    "Gabon"
+    GAB
+    "United Kingdom of Great Britain and Northern Ireland"
+    GBR
+    "Georgia"
+    GEO
+    "Guernsey"
+    GGY
+    "Ghana"
+    GHA
+    "Gibraltar"
+    GIB
+    "Guinea"
+    GIN
+    "Guadeloupe"
+    GLP
+    "Gambia"
+    GMB
+    "Guinea-Bissau"
+    GNB
+    "Equatorial Guinea"
+    GNQ
+    "Greece"
+    GRC
+    "Grenada"
+    GRD
+    "Greenland"
+    GRL
+    "Guatemala"
+    GTM
+    "French Guiana"
+    GUF
+    "Guam"
+    GUM
+    "Guyana"
+    GUY
+    "Hong Kong"
+    HKG
+    "Heard Island and McDonald Islands"
+    HMD
+    "Honduras"
+    HND
+    "Croatia"
+    HRV
+    "Haiti"
+    HTI
+    "Hungary"
+    HUN
+    "Indonesia"
+    IDN
+    "Isle of Man"
+    IMN
+    "India"
+    IND
+    "British Indian Ocean Territory"
+    IOT
+    "Ireland"
+    IRL
+    "Iran (Islamic Republic of)"
+    IRN
+    "Iraq"
+    IRQ
+    "Iceland"
+    ISL
+    "Israel"
+    ISR
+    "Italy"
+    ITA
+    "Jamaica"
+    JAM
+    "Jersey"
+    JEY
+    "Jordan"
+    JOR
+    "Japan"
+    JPN
+    "Kazakhstan"
+    KAZ
+    "Kenya"
+    KEN
+    "Kyrgyzstan"
+    KGZ
+    "Cambodia"
+    KHM
+    "Kiribati"
+    KIR
+    "Saint Kitts and Nevis"
+    KNA
+    "Korea (Republic of)"
+    KOR
+    "Kuwait"
+    KWT
+    "Lao People's Democratic Republic"
+    LAO
+    "Lebanon"
+    LBN
+    "Liberia"
+    LBR
+    "Libya"
+    LBY
+    "Saint Lucia"
+    LCA
+    "Liechtenstein"
+    LIE
+    "Sri Lanka"
+    LKA
+    "Lesotho"
+    LSO
+    "Lithuania"
+    LTU
+    "Luxembourg"
+    LUX
+    "Latvia"
+    LVA
+    "Macao"
+    MAC
+    "Saint Martin (French part)"
+    MAF
+    "Morocco"
+    MAR
+    "Monaco"
+    MCO
+    "Moldova (Republic of)"
+    MDA
+    "Madagascar"
+    MDG
+    "Maldives"
+    MDV
+    "Mexico"
+    MEX
+    "Marshall Islands"
+    MHL
+    "North Macedonia"
+    MKD
+    "Mali"
+    MLI
+    "Malta"
+    MLT
+    "Myanmar"
+    MMR
+    "Montenegro"
+    MNE
+    "Mongolia"
+    MNG
+    "Northern Mariana Islands"
+    MNP
+    "Mozambique"
+    MOZ
+    "Mauritania"
+    MRT
+    "Montserrat"
+    MSR
+    "Martinique"
+    MTQ
+    "Mauritius"
+    MUS
+    "Malawi"
+    MWI
+    "Malaysia"
+    MYS
+    "Mayotte"
+    MYT
+    "Namibia"
+    NAM
+    "New Caledonia"
+    NCL
+    "Niger"
+    NER
+    "Norfolk Island"
+    NFK
+    "Nigeria"
+    NGA
+    "Nicaragua"
+    NIC
+    "Niue"
+    NIU
+    "Netherlands"
+    NLD
+    "Norway"
+    NOR
+    "Nepal"
+    NPL
+    "Nauru"
+    NRU
+    "New Zealand"
+    NZL
+    "Oman"
+    OMN
+    "Pakistan"
+    PAK
+    "Panama"
+    PAN
+    "Pitcairn"
+    PCN
+    "Peru"
+    PER
+    "Philippines"
+    PHL
+    "Palau"
+    PLW
+    "Papua New Guinea"
+    PNG
+    "Poland"
+    POL
+    "Puerto Rico"
+    PRI
+    "Korea (Democratic People's Republic of)"
+    PRK
+    "Portugal"
+    PRT
+    "Paraguay"
+    PRY
+    "Palestine, State of"
+    PSE
+    "French Polynesia"
+    PYF
+    "Qatar"
+    QAT
+    "Réunion"
+    REU
+    "Romania"
+    ROU
+    "Russian Federation"
+    RUS
+    "Rwanda"
+    RWA
+    "Saudi Arabia"
+    SAU
+    "Sudan"
+    SDN
+    "Senegal"
+    SEN
+    "Singapore"
+    SGP
+    "South Georgia and the South Sandwich Islands"
+    SGS
+    "Saint Helena, Ascension and Tristan da Cunha"
+    SHN
+    "Svalbard and Jan Mayen"
+    SJM
+    "Solomon Islands"
+    SLB
+    "Sierra Leone"
+    SLE
+    "El Salvador"
+    SLV
+    "San Marino"
+    SMR
+    "Somalia"
+    SOM
+    "Saint Pierre and Miquelon"
+    SPM
+    "Serbia"
+    SRB
+    "South Sudan"
+    SSD
+    "Sao Tome and Principe"
+    STP
+    "Suriname"
+    SUR
+    "Slovakia"
+    SVK
+    "Slovenia"
+    SVN
+    "Sweden"
+    SWE
+    "Eswatini"
+    SWZ
+    "Sint Maarten (Dutch part)"
+    SXM
+    "Seychelles"
+    SYC
+    "Syrian Arab Republic"
+    SYR
+    "Turks and Caicos Islands"
+    TCA
+    "Chad"
+    TCD
+    "Togo"
+    TGO
+    "Thailand"
+    THA
+    "Tajikistan"
+    TJK
+    "Tokelau"
+    TKL
+    "Turkmenistan"
+    TKM
+    "Timor-Leste"
+    TLS
+    "Tonga"
+    TON
+    "Trinidad and Tobago"
+    TTO
+    "Tunisia"
+    TUN
+    "Turkey"
+    TUR
+    "Tuvalu"
+    TUV
+    "Taiwan (Province of China)"
+    TWN
+    "Tanzania, United Republic of"
+    TZA
+    "Uganda"
+    UGA
+    "Ukraine"
+    UKR
+    "United States Minor Outlying Islands"
+    UMI
+    "Uruguay"
+    URY
+    "United States of America"
+    USA
+    "Uzbekistan"
+    UZB
+    "Holy See"
+    VAT
+    "Saint Vincent and the Grenadines"
+    VCT
+    "Venezuela (Bolivarian Republic of)"
+    VEN
+    "Virgin Islands (British)"
+    VGB
+    "Virgin Islands (U.S.)"
+    VIR
+    "Viet Nam"
+    VNM
+    "Vanuatu"
+    VUT
+    "Wallis and Futuna"
+    WLF
+    "Samoa"
+    WSM
+    "Yemen"
+    YEM
+    "South Africa"
+    ZAF
+    "Zambia"
+    ZMB
+    "Zimbabwe"
+    ZWE
+}
+
+enum Currency {
+    "South African Rand"
+    ZAR
+}
+
+enum DepositMethod {
+    "Wallet"
+    ACC @deprecated(reason: "Replaced by WALLET")
+    "Card"
+    CARD
+    "Card"
+    ECEN
+    "EFT"
+    EFT
+    "Ozow"
+    INSTANT_EFT
+    "Ozow"
+    OZOW
+    "PayJustNow"
+    PJN
+    "SnapScan"
+    SNAP
+    "SnapScan"
+    SNAPSCAN
+    "UCount Rewards"
+    UCOUNT
+    "TradeSafe Wallet"
+    WALLET
+}
+
+enum DrawdownState {
+    "Approved"
+    APPROVED
+    "Canceled"
+    CANCELED
+    "Created"
+    CREATED
+    "Funds Released"
+    FUNDS_RELEASED
+    "Pending Approval"
+    PENDING
+    "Rejected"
+    REJECTED
+}
+
+"The type of error that has been raised"
+enum ErrorType {
+    "Debugging Information"
+    DEBUG
+    "General Errors"
+    ERROR
+    "Informational Messages"
+    INFO
+    "Warnings"
+    WARNING
+}
+
+enum FeeAllocation {
+    "Agent Pays Whole Fee"
+    AGENT
+    "Buyer Pays Whole Fee"
+    BUYER
+    "Buyer & Agent Split Fee 50/50"
+    BUYER_AGENT
+    "Buyer & Seller Split Fee 50/50"
+    BUYER_SELLER
+    "Fee Split 3-ways between Buyer, Seller & Agent"
+    BUYER_SELLER_AGENT
+    "Seller Pays Whole Fee"
+    SELLER
+    "Seller & Agent Split Fee 50/50"
+    SELLER_AGENT
+}
+
+enum FeeType {
+    "Flat Fee"
+    FLAT
+    "Percentage"
+    PERCENT
+    "Per Unit"
+    PER_UNIT
+}
+
+enum FilterAction {
+    "Allow"
+    ALLOW
+    "Block"
+    BLOCK
+}
+
+enum FilterType {
+    "Card Number"
+    CARD
+    "IP Address"
+    IP
+}
+
+enum IdType {
+    "National ID"
+    NATIONAL
+    "Passport"
+    PASSPORT
+}
+
+enum Industry {
+    "Agriculture, Livestock & Game"
+    AGRICULTURE_LIVESTOCK_GAME
+    "Art, Antiques & Collectibles"
+    ART_ANTIQUES_COLLECTIBLES
+    "Cell phones, Computers & Electronics"
+    CELLPHONES_COMPUTERS
+    "Construction"
+    CONSTRUCTION
+    "Freelancing & Contract Work"
+    CONTRACT_WORK_FREELANCING
+    "Events, Weddings & Functions"
+    EVENTS
+    "Films, Production & Photography"
+    FILMS_PRODUCTION
+    "Diesel, Petroleum & Lubricating Oils"
+    FUEL
+    "General Goods & Services"
+    GENERAL_GOODS_SERVICES
+    "Mergers & Acquisitions"
+    MERGERS_ACQUISITIONS
+    "Mining & Metals"
+    MINING
+    "Property (Residential & Commercial)"
+    PROPERTY
+    "Renewables"
+    RENEWABLES
+    "Rental Deposits & Holiday Rentals"
+    RENTAL
+    "Web Domain Purchases & Transfers"
+    SOFTWARE_DEV_WEB_DOMAINS
+    "Cars, Bikes, Planes & Boats"
+    VEHICLES_WATERCRAFT
+}
+
+enum MFAMethod {
+    "Application"
+    APP
+    "Email"
+    EMAIL
+    "Mobile"
+    MOBILE
+    "Token"
+    TOKEN
+}
+
+"Aggregate functions when ordering by a relation without specifying a column."
+enum OrderByRelationAggregateFunction {
+    "Amount of items."
+    COUNT
+}
+
+"Aggregate functions when ordering by a relation that may specify a column."
+enum OrderByRelationWithColumnAggregateFunction {
+    "Average."
+    AVG
+    "Amount of items."
+    COUNT
+    "Maximum."
+    MAX
+    "Minimum."
+    MIN
+    "Sum."
+    SUM
+}
+
+enum OrganizationRole {
+    "Administrator"
+    ADMINISTRATOR
+    "Developer"
+    DEVELOPER
+    "Transaction Manager"
+    MANAGER
+    "Organization Member"
+    MEMBER
+    "Observer"
+    OBSERVER
+    "Owner"
+    OWNER
+}
+
+enum OrganizationType {
+    "Close Corporation"
+    CC
+    "Personal Liability Company"
+    INC
+    "Not for Profit"
+    NPC
+    "Other"
+    OTHER
+    "Private Company"
+    PRIVATE
+    "Public Company"
+    PUBLIC
+    "Sole Proprietorship"
+    SOLE_PROP
+    "State Owned Enterprise"
+    STATE
+    "Trust"
+    TRUST
+}
+
+"Type of payment action"
+enum PaymentAction {
+    "Add card to the database"
+    ADDCARD
+    "Authorize a card payment"
+    AUTHORIZATION
+    "Process a card payment"
+    PAYMENT
+    "Perform 3DS request"
+    SECURE3D
+}
+
+"Payment Gateways"
+enum PaymentGateway {
+    "Card"
+    ECENTRIC
+    "Manual EFT"
+    EFT
+    "Instant EFT"
+    OZOW
+    "PayJustNow"
+    PJN
+    "SnapScan"
+    SNAPSCAN
+    "TradeSafe Wallet"
+    WALLET
+}
+
+"Payment log message type"
+enum PaymentStatus {
+    "Error"
+    ERROR
+    "Informational"
+    INFO
+    "Successful"
+    SUCCESS
+    "Warning"
+    WARNING
+}
+
+enum PayoutInterval {
+    "Escrow Wallet"
+    ACCOUNT
+    "Bimonthly"
+    BIMONTHLY
+    "Daily"
+    DAILY
+    "Immediate"
+    IMMEDIATE
+    "Monthly"
+    MONTHLY
+    "Escrow Wallet"
+    WALLET
+    "Weekly"
+    WEEKLY
+}
+
+"Allowed column names for Query.transactions.orderBy."
+enum QueryTransactionsOrderByColumn {
+    CREATED_AT
+    UPDATED_AT
+}
+
+enum RecurringPaymentFeeAllocation {
+    "Buyer pays the processing fee"
+    BUYER
+    "Merchant pays the processing fee"
+    MERCHANT
+}
+
+enum RecurringPaymentInterval {
+    "Payment is made once every 12 months"
+    ANNUALLY
+    "Payment is made once every month"
+    MONTHLY
+    "Payment is made once every 3 months"
+    QUARTERLY
+    "Payment is made once every 6 months"
+    SEMIANNUALLY
+}
+
+enum RecurringPaymentState {
+    "Recurring Payment is active and processing payments"
+    ACTIVE
+    "Recurring Payment was canceled"
+    CANCELLED
+    "Recurring Payment has reached its end date"
+    COMPLETED
+    "Recurring Payment has been created and awaiting card capture"
+    PENDING
+    "Recurring Payment was suspended"
+    SUSPENDED
+}
+
+enum RecurringPaymentStatus {
+    FAILED
+    SUCCESSFUL
+}
+
+enum RefundMethod {
+    "Escrow Wallet"
+    ACCOUNT
+    "Bank Account"
+    IMMEDIATE
+    "Escrow Wallet"
+    WALLET
+}
+
+"The current status of a requested report"
+enum ReportStatus {
+    "The report is ready for download"
+    COMPLETE
+    "The report is being processed"
+    PROCESSING
+    "The report has been requested"
+    REQUESTED
+}
+
+"The type of report been requested"
+enum ReportType {
+    "Audit Report"
+    AUDIT
+    "Payment Errors"
+    PAYMENT_ERRORS
+    "Transaction Summary"
+    TRANSACTION_SUMMARY
+}
+
+enum Role {
+    "Agent"
+    AGENT
+    "Adviser"
+    BENEFICIARY_ADVISER
+    "Consultant"
+    BENEFICIARY_CONSULTANT
+    "Delivery Company"
+    BENEFICIARY_DELIVERY_COMPANY
+    "Financial Institution"
+    BENEFICIARY_FINANCIAL_INSTITUTION
+    "Intermediary"
+    BENEFICIARY_INTERMEDIARY
+    "Legal counsel"
+    BENEFICIARY_LEGAL_COUNSEL
+    "3rd Party Merchant"
+    BENEFICIARY_MERCHANT
+    "Other"
+    BENEFICIARY_OTHER
+    "Sub-Agent"
+    BENEFICIARY_SUB_AGENT
+    "Wholesaler"
+    BENEFICIARY_WHOLESALER
+    "Buyer"
+    BUYER
+    "Read-Only User"
+    READ_ONLY
+    "Seller"
+    SELLER
+}
+
+enum RtcParticipant {
+    "Absa Bank"
+    ABSA
+    "African Bank"
+    AFRICAN
+    "Albaraka Bank"
+    ALBARAKA
+    "Bidvest Bank"
+    BIDVEST
+    "Capitec Bank"
+    CAPITEC
+    "Capitec Business"
+    CAPITEC_BUSINESS
+    "Discovery Bank"
+    DISCOVERY
+    "First National Bank"
+    FNB
+    "Investec Bank"
+    INVESTEC
+    "Nedbank"
+    NEDBANK
+    "Postbank"
+    POSTBANK
+    "Sasfin Bank"
+    SASFIN
+}
+
+"Directions for ordering a list of records."
+enum SortOrder {
+    "Sort records in ascending order."
+    ASC
+    "Sort records in descending order."
+    DESC
+}
+
+enum State {
+    "Transaction Abandoned"
+    ABANDONED
+    "Transaction Accepted"
+    ACCEPTED
+    "Canceled by admin"
+    ADMIN_CANCELED
+    "Transaction canceled and refunded by admin"
+    ADMIN_REFUNDED
+    "Suspended by admin"
+    ADMIN_SUSPENDED
+    "Transaction Canceled"
+    CANCELED
+    "Funds Released"
+    COMPLETE @deprecated(reason: "Never used")
+    "Created"
+    CREATED
+    "Transaction Declined"
+    DECLINED
+    "Goods / Service Accepted"
+    DELIVERED
+    "Transaction Disputed"
+    DISPUTED
+    "Extension Requested"
+    DISPUTED_EXTENDED
+    "Renegotiation Requested"
+    DISPUTED_RENEGOTIATE
+    "Awaiting EFT Deposit"
+    FUNDS_DEPOSITED
+    "Funds Received & Cleared"
+    FUNDS_RECEIVED
+    "Funds Released"
+    FUNDS_RELEASED
+    "Goods / Service Accepted"
+    GOODS_ACCEPTED @deprecated(reason: "Replaced by INITIATED & DELIVERED")
+    "Goods Sent / Service Initiated"
+    INITIATED
+    "Invitation Sent"
+    INVITATION_SENT
+    "Legal"
+    LEGAL
+    "Transaction Negotiation"
+    NEGOTIATION
+    "There was an error while making payment"
+    PAYMENT_FAILED
+    "Payment Pending"
+    PAYMENT_PENDING
+    "Transaction Refunded"
+    REFUNDED
+    "Suspended by admin"
+    SUSPENDED @deprecated(reason: "Replaced by ADMIN_SUSPENDED")
+}
+
+enum TransactionPrivacy {
+    "All details are private"
+    ALL
+    "Fee's and costs are private"
+    CALCULATIONS
+    "Party details are private"
+    DETAILS
+    "All details are visible"
+    NONE
+}
+
+enum TransactionStatus {
+    "Processed"
+    ACSP
+    "Created"
+    CRTD
+    "Partly Processed"
+    PART
+    "Pending"
+    PDNG
+    "Received"
+    RCVD
+    "Rejected"
+    RJCT
+}
+
+enum TransactionType {
+    "Credit"
+    CREDIT
+    "Debit"
+    DEBIT
+}
+
+enum TransactionWorkflow {
+    "Payments are requested on a adhoc basis"
+    DRAWDOWN
+    "Payment is made on receipt of the funds"
+    EXPRESS
+    "Multiple payments occur over a set period"
+    MILESTONE
+    "Payment is made on completion of the transaction"
+    STANDARD
+}
+
+"Specify if you want to include or exclude trashed results from a query."
+enum Trashed {
+    "Only return trashed results."
+    ONLY
+    "Return both trashed and non-trashed results."
+    WITH
+    "Only return non-trashed results."
+    WITHOUT
+}
+
+enum UniversalBranchCode {
+    "Absa Bank"
+    ABSA
+    "African Bank"
+    AFRICAN
+    "Bank Zero"
+    BANKZERO
+    "Bidvest Bank"
+    BIDVEST
+    "Capitec Bank"
+    CAPITEC
+    "Capitec Business"
+    CAPITEC_BUSINESS
+    "Discovery Bank"
+    DISCOVERY
+    "First National Bank"
+    FNB
+    "Investec Bank"
+    INVESTEC
+    "Ithala"
+    ITHALA
+    "Mercantile"
+    MERCANTILE
+    "Nedbank"
+    NEDBANK
+    "Other Bank"
+    OTHER
+    "RMB Private Bank"
+    RMB
+    "Sasfin Bank"
+    SASFIN
+    "Standard Bank South Africa"
+    SBSA
+    "TymeBank"
+    TYME
+}
+
+enum VerificationType {
+    "Verify email address"
+    EMAIL
+    "Verify mobile using SMS"
+    SMS
+}
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime
+
+"A RFC 5321 compliant email."
+scalar Email
+
+"Arbitrary data encoded in JavaScript Object Notation. See https://www.json.org/."
+scalar JSON
+
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload
+
+input AllocationInput {
+    addressId: ID
+    auxiliaryData: JSON
+    daysToDeliver: Float
+    daysToInspect: Float
+    deliveryInstructions: JSON
+    description: String
+    partyId: ID
+    title: String
+    unitCost: Float
+    units: Float
+    value: Float
+}
+
+input AllocationRelation {
+    connect: ID
+    create: [CreateAllocationInput!]
+    delete: [ID!]
+    update: [UpdateAllocationInput!]
+}
+
+input AmendmentInput {
+    comment: String
+    daysToDeliver: Float
+    daysToInspect: Float
+    unitCost: Float
+    units: Float
+    value: Float
+}
+
+input CalculatorAllocationsInput {
+    id: ID
+    unitCost: Float
+    units: Float
+    value: Float
+}
+
+input CalculatorInput {
+    allocations: [CalculatorAllocationsInput!]!
+    feeAllocation: FeeAllocation!
+    industry: Industry
+    parties: [CalculatorPartiesInput!]!
+}
+
+input CalculatorPartiesInput {
+    fee: Float
+    feeAllocation: FeeAllocation
+    feeType: FeeType
+    role: Role
+}
+
+input CardInput {
+    cardholderName: String!
+    code: Int!
+    month: Int!
+    number: String!
+    year: Int!
+}
+
+input CreateAllocationInput {
+    addressId: ID
+    auxiliaryData: JSON
+    daysToDeliver: Float
+    daysToInspect: Float
+    deliveryInstructions: JSON
+    description: String
+    title: String
+    unitCost: Float
+    units: Float
+    value: Float
+}
+
+"Create an Express Transaction"
+input CreateExpressTransactionInput {
+    "Buyer Token ID"
+    buyerTokenId: ID!
+    "Long description of the transaction and its terms"
+    description: String!
+    "Create embedded payment link"
+    embed: Boolean
+    "How TradeSafe's fee is split between the parties"
+    feeAllocation: FeeAllocation
+    "The industry classification for the transaction"
+    industry: Industry!
+    "Select which payment methods to show on the payment page"
+    paymentMethods: [DepositMethod]
+    "Reference used to link a transaction to your system"
+    reference: String
+    "Title summarising the transaction"
+    title: String!
+    "Value of the Transaction"
+    value: Float!
+}
+
+"Create a Transaction"
+input CreateTransactionInput {
+    "Delivery Address ID"
+    addressId: String
+    "How should the funds be paid out"
+    allocations: AllocationRelation
+    "Additional data to describe the transaction"
+    auxiliaryData: JSON
+    "The base currency for the transaction"
+    currency: Currency!
+    "Delivery Instructions"
+    deliveryInstructions: String
+    "Long description of the transaction and its terms"
+    description: String!
+    "How TradeSafe's fee is split between the parties"
+    feeAllocation: FeeAllocation!
+    "The industry classification for the transaction"
+    industry: Industry!
+    "Parties involved in the transaction"
+    parties: PartiesRelation
+    privacy: TransactionPrivacy
+    reference: String
+    "Title summarising the transaction"
+    title: String!
+    "How should the transaction be structured"
+    workflow: TransactionWorkflow
+}
+
+input DateRange {
+    from: Date!
+    to: Date!
+}
+
+input DrawdownInput {
+    description: String!
+    title: String!
+    transactionId: ID!
+    value: Float!
+}
+
+"Allows ordering a list of records."
+input OrderByClause {
+    "The column that is used for ordering."
+    column: String!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+input PartiesRelation {
+    connect: ID
+    create: [PartyInput!]
+    delete: [ID!]
+    update: [UpdatePartyInput!]
+}
+
+input PartyInput {
+    "Email of party"
+    email: String
+    "Fee"
+    fee: Float
+    "Fee Allocation"
+    feeAllocation: FeeAllocation
+    "Fee Type"
+    feeType: FeeType
+    "Role of party in transaction"
+    role: Role
+    "Tokenized userdata"
+    token: String
+}
+
+input PayoutSettingsInput {
+    interval: PayoutInterval
+    refund: RefundMethod
+}
+
+"Order by clause for Query.transactions.orderBy."
+input QueryTransactionsOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryTransactionsOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+input RecurringPaymentBeneficiaryInput {
+    tokenId: ID!
+    value: Float!
+}
+
+input RecurringPaymentBeneficiaryRelation {
+    connect: ID
+    create: [RecurringPaymentBeneficiaryInput!]
+}
+
+input RecurringPaymentInput {
+    beneficiaries: RecurringPaymentBeneficiaryRelation
+    buyerTokenId: ID
+    description: String
+    endDate: Date
+    feeAllocation: RecurringPaymentFeeAllocation
+    interval: RecurringPaymentInterval
+    merchantReference: String!
+    title: String!
+    value: Float!
+}
+
+input RecurringPaymentUserData {
+    cardCvv: String!
+    cardMonth: String!
+    cardName: String!
+    cardNumber: String!
+    cardYear: String!
+    email: Email!
+    firstName: String!
+    id: ID!
+    lastName: String!
+    mobile: String!
+    signature: String!
+    timestamp: String!
+}
+
+input TokenBankAccountInput {
+    accountNumber: String
+    accountType: BankAccountType
+    bank: UniversalBranchCode
+    bankName: String
+    branchCode: String
+}
+
+input TokenInput {
+    bankAccount: TokenBankAccountInput
+    organization: TokenOrganizationInput
+    settings: TokenSettingsInput
+    user: TokenUserInput!
+}
+
+input TokenOrganizationInput {
+    name: String
+    registrationNumber: String
+    taxNumber: String
+    tradeName: String
+    type: OrganizationType
+}
+
+input TokenSettingsInput {
+    creditAccount: Boolean
+    payout: PayoutSettingsInput
+    payoutInterval: PayoutInterval
+}
+
+input TokenUserInput {
+    email: Email
+    familyName: String
+    givenName: String
+    idCountry: Country
+    idNumber: String
+    idType: IdType
+    mobile: String
+}
+
+input TransactionDepositRedirects {
+    cancel: String!
+    failure: String!
+    success: String!
+}
+
+"Filter transactions"
+input TransactionFilterInput {
+    inState: [State]
+    notState: [State]
+}
+
+input UpdateAllocationInput {
+    addressId: ID
+    auxiliaryData: JSON
+    daysToDeliver: Float
+    daysToInspect: Float
+    deliveryInstructions: JSON
+    description: String
+    id: ID!
+    title: String
+    unitCost: Float
+    units: Float
+    value: Float
+}
+
+input UpdatePartyInput {
+    "Email of party"
+    email: String
+    "Fee"
+    fee: Float
+    "Fee Allocation"
+    feeAllocation: FeeAllocation
+    "Fee Type"
+    feeType: FeeType
+    id: ID
+    "Role of party in transaction"
+    role: Role
+    "Tokenized userdata"
+    token: String
+}
+
+"Update a Transaction"
+input UpdateTransactionInput {
+    "Delivery Address ID"
+    addressId: String
+    "How should the funds be paid out"
+    allocations: AllocationRelation
+    "Additional data to describe the transaction"
+    auxiliaryData: JSON
+    "The base curreny for the transaction"
+    currency: Currency
+    "Delivery Instructions"
+    deliveryInstructions: String
+    "Long description of the transaction and its terms"
+    description: String
+    "How TradeSafe's fee is split between the parties"
+    feeAllocation: FeeAllocation
+    "Transaction ID"
+    id: ID!
+    "The industry classificaton for the transaction"
+    industry: Industry
+    "Parties involved in the transaction"
+    parties: PartiesRelation
+    privacy: TransactionPrivacy
+    reference: String
+    "Title sumarising the transaction"
+    title: String
+}

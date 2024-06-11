@@ -1,0 +1,3 @@
+mutation checkoutLink($transactionId: ID!, $embed: Boolean, $paymentMethods: [DepositMethod]) {
+    link: checkoutLink(transactionId: $transactionId, embed: $embed, paymentMethods: $paymentMethods)
+}

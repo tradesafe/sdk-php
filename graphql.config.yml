@@ -1,0 +1,6 @@
+schema: src/GraphQL/schema.graphql
+documents: '**/*.graphql'
+extensions:
+  endpoints:
+    default: https://api.tradesafe.co.za/graphql
+    sandbox: https://api-developer.tradesafe.dev/graphql

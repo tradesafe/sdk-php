@@ -1,0 +1,5 @@
+mutation tokenCreate($input: TokenInput!) {
+    token: tokenCreate(input: $input) {
+        id
+    }
+}
