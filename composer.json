@@ -23,6 +23,9 @@
         "league/oauth2-client": "^2.7",
         "guzzlehttp/guzzle": "^7.8"
     },
+    "replace": {
+        "tradesafe/api": "*"
+    },
     "scripts": {
         "changelog": "conventional-changelog",
         "release": "conventional-changelog --commit",
